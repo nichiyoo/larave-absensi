@@ -17,7 +17,7 @@
             @csrf
             <!-- Nik -->
             <div class="mb-4">
-                <x-input-label class="text-zinc-100" for="nik" :value="__('NIK')" />
+                <label class="block font-medium text-sm text-zinc-200" for="nik">{{ __('NIK') }}</label>
                 <input id="nik" type="text" name="nik" :value="old('nik')" required autofocus
                     autocomplete="nik" placeholder="Enter your NIK"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70" />
@@ -26,7 +26,7 @@
 
             <!-- Password -->
             <div class="mb-6">
-                <x-input-label class="text-zinc-100" for="password" :value="__('Password')" />
+                <label class="block font-medium text-sm text-zinc-200" for="password">{{ __('Password') }} </label>
                 <input id="password" type="password" name="password" required autocomplete="current-password"
                     placeholder="Enter your password"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70" />

@@ -30,10 +30,6 @@
         <a href="{{ route('landing') }}">
             <x-application-logo class="font-bold text-zinc-100 text-lg" />
         </a>
-
-        <div class="dark:bg-secondary-200 bg-gray-500 h-8 w-8 flex items-center justify-center rounded-lg">
-            <x-theme-toggle />
-        </div>
     </div>
 
     <!-- Main Section -->

@@ -18,7 +18,7 @@
 
             <!-- Name -->
             <div class="mb-4">
-                <x-input-label class="text-white" for="name" :value="__('Name')" />
+                <label class="block font-medium text-sm text-zinc-200" for="name">{{ __('Name') }}</label>
                 <input id="name"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70"
                     type="text" name="name" :value="old('name')" required autofocus autocomplete="name"
@@ -28,7 +28,7 @@
 
             <!-- Nik -->
             <div class="mb-4">
-                <x-input-label class="text-white" for="nik" :value="__('NIK')" />
+                <label class="block font-medium text-sm text-zinc-200" for="nik">{{ __('NIK') }}</label>
                 <input id="nik"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70"
                     type="text" name="nik" :value="old('nik')" required autocomplete="nik"
@@ -38,7 +38,7 @@
 
             <!-- Email Address -->
             <div class="mb-4">
-                <x-input-label class="text-white" for="email" :value="__('Email')" />
+                <label class="block font-medium text-sm text-zinc-200" for="email">{{ __('Email') }}</label>
                 <input id="email"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70"
                     type="email" name="email" :value="old('email')" required autocomplete="email"
@@ -48,7 +48,7 @@
 
             <!-- Password -->
             <div class="mb-4">
-                <x-input-label class="text-white" for="password" :value="__('Password')" />
+                <label class="block font-medium text-sm text-zinc-200" for="password">{{ __('Password') }}</label>
                 <input id="password"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70"
                     type="password" name="password" required autocomplete="new-password"
@@ -58,7 +58,8 @@
 
             <!-- Confirm Password -->
             <div class="mb-6">
-                <x-input-label class="text-white" for="password_confirmation" :value="__('Confirm Password')" />
+                <label class="block font-medium text-sm text-zinc-200"
+                    for="password_confirmation">{{ __('Confirm Password') }}</label>
                 <input id="password_confirmation"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70"
                     type="password" name="password_confirmation" required autocomplete="new-password"
