@@ -10,14 +10,14 @@
     @endpush
 
     <div class="w-full max-w-lg px-8 py-10 bg-black/70 rounded-xl">
-        <x-auth-session-status class="mb-4 text-white" :status="session('status')" />
+        <x-auth-session-status class="mb-4 text-zinc-100" :status="session('status')" />
         <h1 class="mb-4 text-3xl font-bold text-center text-secondary-200">Absensi TKNO</h1>
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <!-- Nik -->
             <div class="mb-4">
-                <x-input-label class="text-white" for="nik" :value="__('NIK')" />
+                <x-input-label class="text-zinc-100" for="nik" :value="__('NIK')" />
                 <input id="nik" type="text" name="nik" :value="old('nik')" required autofocus
                     autocomplete="nik" placeholder="Enter your NIK"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70" />
@@ -26,7 +26,7 @@
 
             <!-- Password -->
             <div class="mb-6">
-                <x-input-label class="text-white" for="password" :value="__('Password')" />
+                <x-input-label class="text-zinc-100" for="password" :value="__('Password')" />
                 <input id="password" type="password" name="password" required autocomplete="current-password"
                     placeholder="Enter your password"
                     class="block mt-1 w-full bg-gradient-to-br from-[#7c7a78] to-[#141210] border border-[#717172] placeholder:text-zinc-400 py-3 text-zinc-100 focus:border-secondary-200 focus:ring-secondary-300 rounded-lg opacity-70" />

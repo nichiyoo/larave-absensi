@@ -25,10 +25,28 @@
     <img src="{{ url('assets/hero.jpeg') }}" alt="Hero Image" class="absolute object-cover w-screen h-screen -z-50" />
     <div class="absolute w-screen h-screen bg-black/70 -z-40"></div>
 
+    <!-- Application Logo and Theme Toggle -->
+    <div class="absolute top-0 w-full flex justify-between items-center p-4">
+        <a href="{{ route('landing') }}">
+            <x-application-logo class="font-bold text-zinc-100 text-lg" />
+        </a>
+
+        <div class="dark:bg-secondary-200 bg-gray-500 h-8 w-8 flex items-center justify-center rounded-lg">
+            <x-theme-toggle />
+        </div>
+    </div>
+
     <!-- Main Section -->
     <main class="container flex flex-col items-center justify-center min-h-screen mx-auto">
         {{ $slot }}
     </main>
+
+    <!-- Copy Right -->
+    <footer class="absolute bottom-0 w-full text-center text-zinc-100 p-4">
+        <p class="text-sm">
+            &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
+        </p>
+    </footer>
 
     <!-- Additional Scripts -->
     @stack('scripts')
