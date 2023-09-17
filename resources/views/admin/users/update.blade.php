@@ -1,26 +1,23 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-zinc-900 dark:text-zinc-100">
-            {{ __('Profile Information') }}
+            {{ $user->name }}
+            {{ __('Profile') }}
         </h2>
 
         <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Update your this account's profile information.") }}
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('admin.users.update', ['user' => $user]) }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
         <div>
             <x-input-label for="nik" :value="__('NIK')" />
-            <x-text-input id="nik" name="nik" type="text" class="block w-full mt-1" :value="old('nik', $user->nik)"
-                required autofocus autocomplete="nik" />
+            <x-text-input id="nik" name="nik" type="text" class="block w-full mt-1" :value="old('nik', $user->nik)" required
+                autofocus autocomplete="nik" />
             <x-input-error class="mt-2" :messages="$errors->get('nik')" />
         </div>
 

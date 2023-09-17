@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAbsenRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,11 @@ class UpdateAbsenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 
+            'nik' => ['required', 'string', 'max:255', 'unique:users,nik,' . $this->user->id],
+            'name' => ['required', 'string', 'max:255'],
+            'plant' => ['required', 'string', 'max:255'],
+            'pt' => ['required', 'string', 'max:255'],
+            'tanggal_lahir' => ['required', 'date'],
         ];
     }
 }

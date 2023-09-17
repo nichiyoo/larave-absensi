@@ -15,11 +15,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'John Doe',
+            'name' => 'Administator',
             'nik' => '1234567890',
+            'email' => 'administrator@example.com',
+            'role' => 'admin',
         ]);
 
-        User::factory()->count(10)->create();
+        User::factory()->count(50)->create();
+
         $this->call(RekananSeeder::class);
+        $this->call(RekapAbsenSeeder::class);
     }
 }

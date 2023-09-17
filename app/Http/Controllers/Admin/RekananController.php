@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Rekanan;
+use App\Http\Controllers\Controller;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Redirect;
-
-use App\Http\Requests\StoreRekananRequest;
 
 use Maatwebsite\Excel\Excel as ExcelType;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,7 +20,7 @@ class RekananExport implements FromCollection, WithHeadings
     // get user rekap absen
     public function collection(): Collection
     {
-        return Rekanan::whereDate('created_at', today())->get();
+        return Rekanan::all();
     }
 
     // set excel headings
@@ -43,14 +40,14 @@ class RekananController extends Controller
         // filter rekanan by search (if any)
         $search = $request->query('search');
 
-        // get today's rekanan
-        $rekanans = Rekanan::whereDate('created_at', today())
+        // get all rekanan
+        $rekanans = Rekanan::orderBy('created_at', 'desc')
             ->when($search, function ($query, $search) {
                 return $query->where('nama', 'like', "%{$search}%");
             })->paginate(10);
 
         // return view with rekanans
-        return view('rekanans.index', compact('rekanans'));
+        return view('admin.rekanans.index', compact('rekanans'));
     }
 
     /**
@@ -59,14 +56,5 @@ class RekananController extends Controller
     public function download()
     {
         return Excel::download(new RekananExport, 'rekanans.csv', ExcelType::CSV);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreRekananRequest $request): RedirectResponse
-    {
-        Rekanan::create($request->validated());
-        return Redirect::route('rekanans.index')->with('status', 'Rekanan berhasil ditambahkan');
     }
 }

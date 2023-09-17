@@ -19,11 +19,15 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'nik' => fake()->unique()->numerify('##########'),
+            'nik' => fake()->unique()->numerify('################'),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'role' => 'user',
+            'pt' => 'FJM',
+            'plant' => fake()->randomElement(['Phonska II', 'Phonska III']),
+            'tanggal_lahir' => fake()->dateTimeBetween('-30 years', '-20 years')->format('Y-m-d'),
         ];
     }
 

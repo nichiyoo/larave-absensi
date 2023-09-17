@@ -15,6 +15,7 @@
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
+
             <!-- Nik -->
             <div class="mb-4">
                 <label class="block font-medium text-sm text-zinc-200" for="nik">{{ __('NIK') }}</label>
@@ -25,7 +26,7 @@
             </div>
 
             <!-- Password -->
-            <div class="mb-6">
+            <div class="mb-8">
                 <label class="block font-medium text-sm text-zinc-200" for="password">{{ __('Password') }} </label>
                 <input id="password" type="password" name="password" required autocomplete="current-password"
                     placeholder="Enter your password"
@@ -47,12 +48,14 @@
                 {{ __('Login') }}
             </x-button>
 
-            <div class="flex justify-center mt-2 space-x-2 text-sm text-zinc-300">
-                {{ __('Don\'t have an account?') }}
-                <a href="{{ route('register') }}" class="ml-2 text-secondary-200">
-                    {{ __('Register') }}
-                </a>
-            </div>
+            @if (Route::has('register'))
+                <div class="flex justify-center mt-2 space-x-2 text-sm text-zinc-300">
+                    {{ __('Don\'t have an account?') }}
+                    <a href="{{ route('register') }}" class="ml-2 text-secondary-200">
+                        {{ __('Register') }}
+                    </a>
+                </div>
+            @endif
         </form>
     </div>
 </x-guest-layout>

@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="title">
-        {{ __('Rekanan') }}
+        {{ __('Absensi Rekanan') }}
     </x-slot>
 
     @push('meta-tags')
         <meta name="title" content="Absensi Rekanan">
-        <meta name="description" content="Absensi untuk pekerja rekanan">
+        <meta name="description" content="Management Absensi Rekanan">
         <meta name="keywords" content="phonska,absensi,rekanan">
     @endpush
 
@@ -17,14 +17,13 @@
 
     <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8" x-data="{ rekanan: null }" x-cloak>
-            <div class="flex items-center justify-between mb-6 px-3 sm:px-0">
-                @include('rekanans.create', ['errors' => $errors])
-                @include('rekanans.show')
+            <div class="flex items-center justify-end px-3 sm:px-0">
+                @include('admin.rekanans.show')
 
                 <!-- Session Status -->
                 @if (session('status'))
                     <p x-data="{ flash: true }" x-show="flash" x-transition x-init="setTimeout(() => flash = false, 5000)"
-                        class="text-sm text-phonska-800 dark:text-zinc-200">
+                        class="text-sm text-phonska-800 dark:text-zinc-200 mb-6">
                         {{ session('status') }}
                     </p>
                 @endif
@@ -46,7 +45,7 @@
                 </div>
 
                 <!-- Download CSV -->
-                <form action="{{ route('rekanans.download') }}" method="POST">
+                <form action="{{ route('admin.rekanans.download') }}" method="POST">
                     @csrf
                     <x-button variant="secondary" type="submit">
                         Download

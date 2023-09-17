@@ -48,12 +48,13 @@ class RekananFactory extends Factory
             'nama' => fake()->name(),
             'telepon' => fake()->phoneNumber(),
             'unit' => fake()->randomElement($units),
-            'item' => fake()->word(),            
+            'item' => fake()->word(),
             'pekerjaan' => 'Repair Baseframe',
             'no_permit' => fake()->numberBetween(100000, 999999),
             'rekanan' => 'PT. US/PCS',
             'open' => $open,
             'close' => $close,
+            'created_at' => fake()->dateTimeBetween('-1 week', 'now'),
         ];
     }
 }

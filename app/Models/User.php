@@ -25,6 +25,7 @@ class User extends Authenticatable
         'pt',
         'plant',
         'tanggal_lahir',
+        'role',
     ];
 
     /**

@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\RekapAbsen;
-
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\StoreRekapAbsenRequest;
 use App\Http\Requests\UpdateRekapAbsenRequest;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Maatwebsite\Excel\Excel as ExcelType;
+
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelType;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -20,8 +21,7 @@ class RekapAbsenExport implements FromCollection, WithHeadings, WithMapping
     // get user rekap absen
     public function collection()
     {
-        return RekapAbsen::where('user_id', Auth::user()->id)
-            ->with('user', 'checkin', 'checkout')
+        return RekapAbsen::with('user', 'checkin', 'checkout')
             ->get();
     }
 
@@ -78,20 +78,26 @@ class RekapAbsenExport implements FromCollection, WithHeadings, WithMapping
 
 class RekapAbsenController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        // get all rekap absen
-        $rekaps = RekapAbsen::where('user_id', Auth::user()->id)
-            ->orderBy('tanggal', 'desc')
-            ->with('user', 'checkin', 'checkout')
-            ->paginate(10);
+        // filter rekap absen by search (if any)
+        $start = $request->query('start');
+        $end = $request->query('end');
 
-        // return view
-        return view('absens.history', compact('rekaps'));
+        // get all rekap absen
+        $tknos = RekapAbsen::orderBy('tanggal', 'desc')
+            ->when($start, function ($query, $start) {
+                return $query->whereDate('tanggal', '>=', $start);
+            })
+            ->when($end, function ($query, $end) {
+                return $query->whereDate('tanggal', '<=', $end);
+            })
+            ->with('user', 'checkin', 'checkout')->paginate(10);
+
+        return view('admin.tknos.index', compact('tknos'));
     }
 
     /**
@@ -103,16 +109,52 @@ class RekapAbsenController extends Controller
         return Excel::download(new RekapAbsenExport, 'rekap_absens.csv', ExcelType::CSV);
     }
 
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreRekapAbsenRequest $request)
+    {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(RekapAbsen $rekapAbsen)
+    {
+        throw new Exception('Not implemented');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(RekapAbsen $rekapAbsen)
+    {
+        throw new Exception('Not implemented');
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRekapAbsenRequest $request, RekapAbsen $rekap): RedirectResponse
+    public function update(UpdateRekapAbsenRequest $request, RekapAbsen $rekapAbsen)
     {
-        // update shift and save
-        $rekap->update($request->validated());
-        $rekap->save();
+        throw new Exception('Not implemented');
+    }
 
-        // return redirect
-        return Redirect::route('absens.index')->with('status', 'Shift berhasil diperbarui');
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(RekapAbsen $rekapAbsen)
+    {
+        throw new Exception('Not implemented');
     }
 }

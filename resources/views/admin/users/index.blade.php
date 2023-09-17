@@ -1,25 +1,24 @@
 <x-app-layout>
     <x-slot name="title">
-        {{ __('Rekanan') }}
+        {{ __('Phonska Users') }}
     </x-slot>
 
     @push('meta-tags')
-        <meta name="title" content="Absensi Rekanan">
-        <meta name="description" content="Absensi untuk pekerja rekanan">
-        <meta name="keywords" content="phonska,absensi,rekanan">
+        <meta name="title" content="Manajemen User Phonska">
+        <meta name="description" content="Halaman untuk mengelola user phonska">
+        <meta name="keywords" content="phonska,users,manajemen user">
     @endpush
 
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-zinc-800 dark:text-zinc-200">
-            {{ __('Absensi Rekanan') }}
+            {{ __('Users') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8" x-data="{ rekanan: null }" x-cloak>
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8" x-cloak>
             <div class="flex items-center justify-between mb-6 px-3 sm:px-0">
-                @include('rekanans.create', ['errors' => $errors])
-                @include('rekanans.show')
+                @include('admin.users.create')
 
                 <!-- Session Status -->
                 @if (session('status'))
@@ -30,23 +29,23 @@
                 @endif
             </div>
 
-            <!-- download csv button to 'rekanans.download' route -->
+            <!-- download csv button to 'users.download' route -->
             <div class="flex items-center justify-between mb-6 px-3 sm:px-0">
 
                 <!-- Search -->
                 <div x-cloak x-data="{ search: '{{ request('search') }}' }"
-                    x-on:keydown.debounce.500ms="window.location = '{{ route('rekanans.index') }}?search=' + $event.target.value"
+                    x-on:keydown.debounce.500ms="window.location = '{{ route('admin.users.index') }}?search=' + $event.target.value"
                     class="flex items-center w-full">
                     <x-text-input type="text" name="search" placeholder="Search" x-model="search" autofocus
                         class="w-full max-w-[300px] text-sm" />
-                    <x-button x-show="search" x-on:click="window.location = '{{ route('rekanans.index') }}'"
+                    <x-button x-show="search" x-on:click="window.location = '{{ route('admin.users.index') }}'"
                         variant="secondary" class="ml-2">
                         Clear
                     </x-button>
                 </div>
 
                 <!-- Download CSV -->
-                <form action="{{ route('rekanans.download') }}" method="POST">
+                <form action="{{ route('admin.users.download') }}" method="POST">
                     @csrf
                     <x-button variant="secondary" type="submit">
                         Download
@@ -62,21 +61,18 @@
                                 <tr
                                     class="font-bold text-left text-zinc-600 bg-zinc-100 dark:bg-zinc-700 dark:text-zinc-200">
                                     <th class="px-4 py-3">Action</th>
-                                    <th class="px-4 py-3">Tanggal</th>
                                     <th class="px-4 py-3">Nama</th>
-                                    <th class="px-4 py-3">Telepon</th>
-                                    <th class="px-4 py-3">Unit</th>
-                                    <th class="px-4 py-3">Item</th>
-                                    <th class="px-4 py-3">Pekerjaan</th>
-                                    <th class="px-4 py-3">No Permit</th>
-                                    <th class="px-4 py-3">Rekanan</th>
-                                    <th class="px-4 py-3">Open</th>
-                                    <th class="px-4 py-3">Close</th>
+                                    <th class="px-4 py-3">NIK</th>
+                                    <th class="px-4 py-3">Email</th>
+                                    <th class="px-4 py-3">PT</th>
+                                    <th class="px-4 py-3">Plant</th>
+                                    <th class="px-4 py-3">Tanggal Lahir</th>
+                                    <th class="px-4 py-3">Role</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @if ($rekanans->isEmpty())
+                                @if ($users->isEmpty())
                                     <tr>
                                         <td colspan="10" class="px-4 py-20 text-center">
                                             <p class="text-zinc-500 dark:text-zinc-400">
@@ -85,54 +81,47 @@
                                         </td>
                                     </tr>
                                 @else
-                                    @foreach ($rekanans as $rekanan)
+                                    @foreach ($users as $user)
                                         <tr class="border-b border-zinc-200 dark:border-zinc-700">
                                             <td class="flex justify-center px-4 py-3">
-                                                <i x-cloak x-on:click="rekanan = {{ $rekanan }}" data-lucide="eye"
-                                                    class="w-5 h-5 cursor-pointer text-zinc-400 hover:text-secondary-200" />
-                                            </td>
-
-                                            <td class="px-4 py-3 min-w-[200px]">
-                                                {{ $rekanan->created_at->timezone('Asia/Jakarta')->format('d F Y') }}
+                                                <i data-lucide="file-edit"
+                                                    class="w-5 h-5 cursor-pointer text-zinc-400 hover:text-secondary-200"
+                                                    x-on:click="window.location = '{{ route('admin.users.edit', ['user' => $user]) }}'">
                                             </td>
 
                                             <td class="px-4 py-3 min-w-[300px]">
-                                                {{ $rekanan->nama }}
+                                                {{ $user->name }}
                                             </td>
 
                                             <td class="px-4 py-3 min-w-[250px]">
-                                                {{ $rekanan->telepon }}
+                                                {{ $user->nik }}
+                                            </td>
+
+                                            <td class="px-4 py-3 min-w-[250px]">
+                                                {{ $user->email }}
                                             </td>
 
                                             <td class="px-4 py-3 min-w-[100px]">
-                                                <span
-                                                    class="px-2 py-0.5 bg-phonska-800 text-white rounded-full text-xs">
-                                                    {{ $rekanan->unit }}
-                                                </span>
+                                                @if ($user->pt)
+                                                    <span
+                                                        class="px-2 py-0.5 bg-phonska-800 text-white rounded-full text-xs">
+                                                        {{ $user->pt }}
+                                                    </span>
+                                                @else
+                                                    -
+                                                @endif
                                             </td>
 
                                             <td class="px-4 py-3 min-w-[250px]">
-                                                {{ $rekanan->item }}
+                                                {{ $user->plant }}
                                             </td>
 
                                             <td class="px-4 py-3 min-w-[250px]">
-                                                {{ $rekanan->pekerjaan }}
-                                            </td>
-
-                                            <td class="px-4 py-3 min-w-[150px]">
-                                                {{ $rekanan->no_permit }}
+                                                {{ $user?->tanggal_lahir?->timezone('Asia/Jakarta')->format('d-m-Y') }}
                                             </td>
 
                                             <td class="px-4 py-3 min-w-[250px]">
-                                                {{ $rekanan->rekanan }}
-                                            </td>
-
-                                            <td class="px-4 py-3 min-w-[100px]">
-                                                {{ Illuminate\Support\Carbon::parse($rekanan->open)->format('H:i') }}
-                                            </td>
-
-                                            <td class="px-4 py-3 min-w-[100px]">
-                                                {{ Illuminate\Support\Carbon::parse($rekanan->close)->format('H:i') }}
+                                                {{ $user->role }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -143,8 +132,9 @@
                     </div>
                 </div>
             </div>
+
             <div>
-                {{ $rekanans->appends(request()->query())->links() }}
+                {{ $users->appends(request()->query())->links() }}
             </div>
         </div>
     </div>

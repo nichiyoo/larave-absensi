@@ -1,66 +1,42 @@
 @php
     use Illuminate\Support\Carbon;
     
-    $checkin_target = Carbon::parse($rekap->tanggal)
-        ->timezone('Asia/Jakarta')
-        ->setHour($rekap->shift == 'pagi' ? 7 : ($rekap->shift == 'siang' ? 15 : 23))
-        ->setMinute(0)
-        ->setSecond(0);
-    
-    $checkout_target = Carbon::parse($rekap->shift == 'malam' ? $rekap->tanggal->addDay() : $rekap->tanggal)
-        ->timezone('Asia/Jakarta')
-        ->setHour($rekap->shift == 'pagi' ? 15 : ($rekap->shift == 'siang' ? 23 : 7))
-        ->setMinute(0)
-        ->setSecond(0);
-    
-    if ($checkin == null) {
-        $checkin_status = 'Not Checked In';
-        $checkin_status_class = 'bg-gray-300 text-zinc-800';
-    } else {
-        $checkin_time = Carbon::parse($checkin?->created_at);
-    
-        // check late
-        if ($checkin_time->gt($checkin_target)) {
+    switch ($checkin_status) {
+        case 'late':
             $checkin_status = 'Late';
             $checkin_status_class = 'bg-red-300 text-zinc-800';
-        }
-    
-        // check on time
-        elseif ($checkin_time->diffInMinutes($checkin_target) <= 60) {
-            $checkin_status = 'On Time';
-            $checkin_status_class = 'bg-secondary-200 text-zinc-800';
-        }
-    
-        // check early
-        else {
+            break;
+        case 'early':
             $checkin_status = 'Early';
             $checkin_status_class = 'bg-blue-300 text-zinc-800';
-        }
+            break;
+        case 'ontime':
+            $checkin_status = 'On Time';
+            $checkin_status_class = 'bg-secondary-200 text-zinc-800';
+            break;
+        default:
+            $checkin_status = 'Not Checked In';
+            $checkin_status_class = 'bg-gray-300 text-zinc-800';
+            break;
     }
     
-    if ($checkout == null) {
-        $checkout_status = 'Not Checked Out';
-        $checkout_status_class = 'bg-gray-300 text-zinc-800';
-    } else {
-        $checkout_time = Carbon::parse($checkout?->created_at);
-    
-        // check late
-        if ($checkout_time->gt($checkout_target)) {
+    switch ($checkout_status) {
+        case 'late':
             $checkout_status = 'Late';
             $checkout_status_class = 'bg-blue-300 text-zinc-800';
-        }
-    
-        // check on time
-        elseif ($checkout_time->diffInMinutes($checkout_target) <= 60) {
-            $checkout_status = 'On Time';
-            $checkout_status_class = 'bg-secondary-200 text-zinc-800';
-        }
-    
-        // check early
-        else {
+            break;
+        case 'early':
             $checkout_status = 'Early';
             $checkout_status_class = 'bg-red-300 text-zinc-800';
-        }
+            break;
+        case 'ontime':
+            $checkout_status = 'On Time';
+            $checkout_status_class = 'bg-secondary-200 text-zinc-800';
+            break;
+        default:
+            $checkout_status = 'Not Checked Out';
+            $checkout_status_class = 'bg-gray-300 text-zinc-800';
+            break;
     }
 @endphp
 
@@ -97,25 +73,21 @@
 
 
             <!-- download csv button to 'rekanans.download' route -->
-            <div class="flex items-end justify-between mb-6 px-3 sm:px-0">
+            <div class="flex items-center justify-between mb-6 px-3 sm:px-0 space-x-4">
 
                 <!-- Change Shift -->
-                <form method="post" action="{{ route('rekap-absens.update', ['rekap_absen' => $rekap]) }}">
+                <form method="post" action="{{ route('rekaps.update', ['rekap' => $rekap]) }}"
+                    class="w-full sm:max-w-[300px]">
                     @csrf
                     @method('patch')
 
-                    <x-select-menu name="shift" id="shift" class="w-[200px]" onchange="this.form.submit()">
+                    <x-select-menu name="shift" id="shift" class="w-full text-sm" onchange="this.form.submit()">
                         <option value="pagi" @if ($rekap->shift == 'pagi') selected @endif>Pagi</option>
                         <option value="siang" @if ($rekap->shift == 'siang') selected @endif>Siang</option>
                         <option value="malam" @if ($rekap->shift == 'malam') selected @endif>Malam</option>
                     </x-select-menu>
                     <x-input-error class="mt-2" :messages="$errors->get('shift')" />
                 </form>
-
-                <!-- Today's Date -->
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 text-end whitespace-nowrap">
-                    {{ Carbon::parse($rekap->tanggal)->timezone('Asia/Jakarta')->isoFormat('dddd, D MMMM Y') }}
-                </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -156,12 +128,16 @@
 
                         <div class="flex items-center space-x-4 text-sm mb-2">
                             <p class="text-zinc-500 dark:text-zinc-400 w-[100px]">Longitude</p>
-                            <p class="text-zinc-800 dark:text-zinc-100">{{ $checkin?->longitude }}</p>
+                            <p class="text-zinc-800 dark:text-zinc-100">
+                                {{ number_format($checkin?->longitude, 3) }}
+                            </p>
                         </div>
 
                         <div class="flex items-center space-x-4 text-sm mb-2">
                             <p class="text-zinc-500 dark:text-zinc-400 w-[100px]">Latitude</p>
-                            <p class="text-zinc-800 dark:text-zinc-100">{{ $checkin?->latitude }}</p>
+                            <p class="text-zinc-800 dark:text-zinc-100">
+                                {{ number_format($checkin?->latitude, 3) }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -203,12 +179,16 @@
 
                         <div class="flex items-center space-x-4 text-sm mb-2">
                             <p class="text-zinc-500 dark:text-zinc-400 w-[100px]">Longitude</p>
-                            <p class="text-zinc-800 dark:text-zinc-100">{{ $checkout?->longitude }}</p>
+                            <p class="text-zinc-800 dark:text-zinc-100">
+                                {{ number_format($checkout?->longitude, 3) }}
+                            </p>
                         </div>
 
                         <div class="flex items-center space-x-4 text-sm mb-2">
                             <p class="text-zinc-500 dark:text-zinc-400 w-[100px]">Latitude</p>
-                            <p class="text-zinc-800 dark:text-zinc-100">{{ $checkout?->latitude }}</p>
+                            <p class="text-zinc-800 dark:text-zinc-100">
+                                {{ number_format($checkout?->latitude, 3) }}
+                            </p>
                         </div>
                     </div>
                 </div>

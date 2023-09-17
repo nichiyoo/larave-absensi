@@ -14,6 +14,10 @@ import {
     RotateCcw,
     Zap,
     MapPin,
+    UserCheck2,
+    Briefcase,
+    FolderKanban,
+    FileEdit,
 } from 'lucide';
 
 createIcons({
@@ -32,5 +36,9 @@ createIcons({
         RotateCcw,
         Zap,
         MapPin,
+        UserCheck2,
+        Briefcase,
+        FolderKanban,
+        FileEdit,
     }
 });

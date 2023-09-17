@@ -1,5 +1,6 @@
 <div x-on:keydown.escape="rekanan = null" x-show="rekanan" x-cloak>
     <div x-cloak x-show="rekanan" x-transition.opacity class="fixed inset-0 z-40 bg-zinc-900/80 backdrop-blur-sm"></div>
+
     <div x-cloak x-show="rekanan" x-transition class="fixed inset-0 z-50 flex items-center justify-center">
         <div x-on:click.away="rekanan = null"
             class="w-screen max-w-2xl max-h-[80vh] overflow-y-scroll p-10 bg-white rounded-xl shadow-lg dark:bg-zinc-900 border       dark:border-zinc-700">

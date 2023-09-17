@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,12 @@ class RekapAbsenFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'checkin_id' => null,
+            'checkout_id' => null,
+            'user_id' => User::all()->random()->id,
+            'tanggal' => fake()->dateTimeBetween('-1 week', 'now')->format('Y-m-d'),
+            'shift' => fake()->randomElement(['pagi', 'siang', 'malam']),
+            'catatan' => null,
         ];
     }
 }

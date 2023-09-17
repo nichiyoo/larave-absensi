@@ -1,5 +1,5 @@
 <div x-data="{ modal: @if ($errors->any()) true @else false @endif }" x-on:keydown.window.escape="modal = false" x-cloak>
-    <x-button variant="primary" type="button" x-on:click="modal = !modal">Absen Rekanan</x-button>
+    <x-button variant="primary" type="button" x-on:click="modal = !modal">Absen</x-button>
 
     <div x-cloak x-show="modal" x-transition.opacity class="fixed inset-0 z-40 bg-zinc-900/80 backdrop-blur-sm"></div>
     <div x-cloak x-show="modal" x-transition class="fixed inset-0 z-50 flex items-center justify-center">

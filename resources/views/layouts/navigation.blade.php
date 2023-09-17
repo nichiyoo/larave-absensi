@@ -5,28 +5,61 @@
         <div class="flex space-x-6">
             <!-- Logo -->
             <div class="flex items-center shrink-0">
-                <a href="{{ route('dashboard') }}">
+                <a href="{{ route('landing') }}">
                     <x-application-logo class="font-extrabold text-white dark:text-zinc-200" />
                 </a>
             </div>
-
-            <!-- Auth Navigation Links -->
-            @auth
-                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('absens.index')" :active="request()->routeIs('absens.*')">
-                        {{ __('Absensi') }}
-                    </x-nav-link>
-                </div>
-            @endauth
 
             <!-- Guest Navigation Links -->
             @guest
                 <div class="hidden sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('rekanans.index')" :active="request()->routeIs('rekanans.*')">
-                        {{ __('Rekanan') }}
+                        {{ __('Absensi') }}
                     </x-nav-link>
                 </div>
             @endguest
+
+            <!-- User Navigation Links -->
+            @role('user')
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('absens.index')" :active="request()->routeIs('absens.*')">
+                        {{ __('Absensi') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('rekaps.index')" :active="request()->routeIs('rekaps.*')">
+                        {{ __('History') }}
+                    </x-nav-link>
+                </div>
+            @endrole
+
+            <!-- Admin Navigation Links -->
+            @role('admin')
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{ route('admin.tknos.index') }}" :active="request()->routeIs('admin.tknos.*')">
+                        {{ __('TKNO') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{ route('admin.rekanans.index') }}" :active="request()->routeIs('admin.rekanans.*')">
+                        {{ __('Rekanan') }}
+                    </x-nav-link>
+                </div>
+            @endrole
         </div>
 
         <div class="flex items-center justify-end space-x-4">
@@ -57,9 +90,17 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+                            @role('user')
+                                <x-dropdown-link :href="route('profile.index')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                            @endrole
+
+                            @role('admin')
+                                <x-dropdown-link :href="route('admin.profile.edit')">
+                                    {{ __('Profile') }}
+                                </x-dropdown-link>
+                            @endrole
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
@@ -93,10 +134,43 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-        <div class="space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+        <div>
+            <!-- Guest Navigation Links -->
+            @guest
+                <x-responsive-nav-link :href="route('rekanans.index')" :active="request()->routeIs('rekanans.*')">
+                    {{ __('Absensi') }}
+                </x-responsive-nav-link>
+            @endguest
+
+            <!-- User Navigation Links -->
+            @role('user')
+                <x-responsive-nav-link :href="route('absens.index')" :active="request()->routeIs('absens.*')">
+                    {{ __('Absensi') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('rekaps.index')" :active="request()->routeIs('rekaps.*')">
+                    {{ __('History') }}
+                </x-responsive-nav-link>
+            @endrole
+
+            <!-- Admin Navigation Links -->
+            @role('admin')
+                <x-responsive-nav-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('admin.tknos.index') }}" :active="request()->routeIs('admin.tknos.*')">
+                    {{ __('TKNO') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')">
+                    {{ __('Users') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('admin.rekanans.index') }}" :active="request()->routeIs('admin.rekanans.*')">
+                    {{ __('Rekanan') }}
+                </x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->
@@ -107,9 +181,17 @@
                     <div class="font-medium text-zinc-300">{{ Auth::user()->email }}</div>
                 </div>
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
+                    @role('user')
+                        <x-responsive-nav-link :href="route('profile.index')">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
+                    @endrole
+
+                    @role('admin')
+                        <x-responsive-nav-link :href="route('admin.profile.edit')">
+                            {{ __('Profile') }}
+                        </x-responsive-nav-link>
+                    @endrole
 
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
